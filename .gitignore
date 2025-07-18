@@ -1,0 +1,6 @@
+.env
+node_modules/
+uploads/
+public/assets/Banners/
+products.json
+data/*

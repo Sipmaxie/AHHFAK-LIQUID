@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Banner Slider</title>
+  <link rel="stylesheet" href="css/upload.css" />
+<style>
+  :root {
+    --bg-light: #f9f9f9;
+    --bg-dark: #121212;
+    --text-light: #333;
+    --text-dark: #e0e0e0;
+    --primary: #ff5722;
+    --primary-hover: #e64a19;
+    --accent: #4caf50;
+    --accent-hover: #43a047;
+    --file-bg: #1e88e5;
+    --file-hover: #1565c0;
+    --delete: #f44336;
+    --delete-hover: #e53935;
+    --edit: #2196f3;
+    --edit-hover: #1976d2;
+
+    /* Dark Mode Specific */
+    --bg-form-dark: #1f1f1f;
+    --file-dark: #3949ab;
+    --file-dark-hover: #303f9f;
+    --hint-dark: #aaa;
+    --delete-dark: #e53935;
+    --delete-dark-hover: #c62828;
+    --edit-dark: #42a5f5;
+    --edit-dark-hover: #1e88e5;
+    --badge-dark: #333;
+    --badge-dark-text: #81c784;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  h1, h2 {
+    text-align: center;
+    color: var(--primary);
+    margin-bottom: 25px;
+  }
+
+  /* Top Actions */
+  .top-actions {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .top-actions button,
+  .top-actions a button {
+    padding: 10px 18px;
+    margin: 0 10px 10px 0;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .top-actions button:hover {
+    background-color: var(--primary-hover);
+  }
+
+  /* Form Styles */
+  form {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin: auto;
+    margin-bottom: 40px;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: background-color 0.3s;
+  }
+
+  form input,
+  form textarea,
+  form select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+  }
+
+  form input:focus,
+  form textarea:focus,
+  form select:focus {
+    border-color: var(--primary);
+    outline: none;
+  }
+
+  form button[type="submit"] {
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  form button:hover {
+    background-color: var(--accent-hover);
+  }
+
+  /* File Upload */
+  .custom-file {
+    text-align: center;
+  }
+
+  .file-label {
+    background-color: var(--file-bg);
+    color: white;
+    padding: 12px 24px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+    display: inline-block;
+  }
+
+  .file-label:hover {
+    background-color: var(--file-hover);
+  }
+
+  .file-hint {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #777;
+  }
+
+  /* Preview */
+  .preview {
+    text-align: center;
+  }
+
+  .preview img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px;
+    margin-top: 15px;
+  }
+
+  /* Banner List & Item */
+  .banner-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+    .banner-item {
+    background: white;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    position: relative;
+    text-align: center;
+    transition: background-color 0.3s;
+    }
+
+    .banner-item img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    }
+
+    /* Tombol Hapus di tengah bawah */
+    .banner-actions {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    }
+
+    .banner-item {
+    padding-bottom: 50px; /* agar ruang cukup untuk tombol Hapus */
+    }
+  .banner-actions button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.3s;
+  }
+
+  .btn-delete {
+    background-color: var(--delete);
+  }
+
+  .btn-delete:hover {
+    background-color: var(--delete-hover);
+  }
+
+  .btn-edit {
+    background-color: var(--edit);
+  }
+
+  .btn-edit:hover {
+    background-color: var(--edit-hover);
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    body {
+      padding: 10px;
+    }
+
+    form {
+      padding: 20px;
+    }
+
+    .file-label {
+      width: 100%;
+    }
+
+    .banner-actions {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+
+  /* Dark Mode */
+  body.dark-mode {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+  }
+
+  body.dark-mode h1,
+  body.dark-mode h2 {
+    color: #ffab40;
+  }
+
+  body.dark-mode form,
+  body.dark-mode .banner-item {
+    background-color: var(--bg-form-dark);
+    box-shadow: 0 3px 15px rgba(0,0,0,0.4);
+  }
+
+  body.dark-mode input,
+  body.dark-mode select,
+  body.dark-mode textarea {
+    background-color: #1e1e1e;
+    color: #f1f1f1;
+    border: 1px solid #444;
+  }
+
+  body.dark-mode .file-label {
+    background-color: var(--file-dark);
+  }
+
+  body.dark-mode .file-label:hover {
+    background-color: var(--file-dark-hover);
+  }
+
+  body.dark-mode .file-hint {
+    color: var(--hint-dark);
+  }
+
+  body.dark-mode .top-actions button {
+    background-color: #ffab40;
+    color: black;
+  }
+
+  body.dark-mode .top-actions button:hover {
+    background-color: #fb8c00;
+  }
+
+  body.dark-mode .btn-delete {
+    background-color: var(--delete-dark);
+  }
+
+  body.dark-mode .btn-delete:hover {
+    background-color: var(--delete-dark-hover);
+  }
+
+  body.dark-mode .btn-edit {
+    background-color: var(--edit-dark);
+  }
+
+  body.dark-mode .btn-edit:hover {
+    background-color: var(--edit-dark-hover);
+  }
+</style>
+
+
+</head>
+<body>
+  <div class="top-actions">
+    <a href="/index.html"><button>Home</button></a>
+    <a href="upload-product.html"><button>Upload Produk</button></a>
+    <button id="toggleThemeButton">Mode Gelap</button>
+  </div>
+
+  <h1>Upload Banner Slider</h1>
+
+  <form id="bannerForm" enctype="multipart/form-data">
+    <div class="custom-file">
+      <label for="bannerImage" class="file-label">+ Pilih Gambar Banner</label>
+      <input type="file" id="bannerImage" name="banner" accept="image/*" required hidden>
+      <p class="file-hint">Gambar banner direkomendasikan ukuran horizontal</p>
+    </div>
+    <div class="preview" id="previewContainer"></div>
+    <button type="submit">Upload Banner</button>
+  </form>
+
+  <h2>Daftar Banner Saat Ini</h2>
+  <div id="bannerList" class="banner-list"></div>
+
+  <script>
+  // ✅ Cek autentikasi
+  fetch("/check-auth", { credentials: "include" })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.authenticated) window.location.href = "/login.html";
+    });
+
+  // ✅ Preview gambar
+  const input = document.getElementById("bannerImage");
+  const preview = document.getElementById("previewContainer");
+
+  input.addEventListener("change", () => {
+    preview.innerHTML = "";
+    const file = input.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // ✅ Upload banner
+  document.getElementById("bannerForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const file = input.files[0];
+    if (!file) return alert("Pilih file gambar terlebih dahulu!");
+
+    const formData = new FormData();
+    formData.append("banner", file);
+
+    try {
+      const res = await fetch("/api/upload-banner", {
+        method: "POST",
+        body: formData
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Server error: ${res.status} - ${text}`);
+      }
+
+      const data = await res.json();
+      if (data.success) {
+        alert("Banner berhasil diupload!");
+        loadBanners();
+        preview.innerHTML = "";
+        input.value = "";
+      } else {
+        alert("Gagal upload banner.");
+      }
+    } catch (err) {
+      alert("Terjadi kesalahan saat mengupload banner.");
+      console.error(err);
+    }
+  });
+
+  // ✅ Load daftar banner
+  async function loadBanners() {
+    try {
+      const res = await fetch("/api/banners");
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Gagal fetch banners: ${res.status} - ${text}`);
+      }
+
+      const banners = await res.json();
+      const list = document.getElementById("bannerList");
+      list.innerHTML = "";
+
+      banners.forEach((url) => {
+        const item = document.createElement("div");
+        item.className = "banner-item";
+        item.innerHTML = `
+          <img src="${url}" alt="Banner">
+          <div class="banner-actions">
+            <button class="btn-delete" onclick="deleteBanner('${encodeURIComponent(url)}')">Hapus</button>
+          </div>`;
+        list.appendChild(item);
+      });
+    } catch (error) {
+      console.error("❌ Gagal memuat banner:", error);
+    }
+  }
+
+  // ✅ Hapus banner
+  async function deleteBanner(encodedUrl) {
+    if (!confirm("Hapus banner ini?")) return;
+    try {
+      const res = await fetch(`/api/delete-banner?url=${encodedUrl}`, {
+        method: "DELETE"
+      });
+      const data = await res.json();
+      if (data.success) {
+        loadBanners();
+      } else {
+        alert("Gagal menghapus banner.");
+      }
+    } catch (err) {
+      alert("Gagal menghapus banner.");
+      console.error(err);
+    }
+  }
+
+  // ✅ Toggle tema (gelap / terang)
+  const toggleButton = document.getElementById("toggleThemeButton");
+  const currentTheme = localStorage.getItem("theme");
+
+  if (currentTheme === "dark") {
+    document.body.classList.add("dark-mode");
+    toggleButton.textContent = "Mode Terang";
+  }
+
+  toggleButton.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    const isDark = document.body.classList.contains("dark-mode");
+    toggleButton.textContent = isDark ? "Mode Terang" : "Mode Gelap";
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  });
+
+  // ✅ Jalankan saat halaman siap
+  loadBanners();
+</script>
+</body>
+</html>

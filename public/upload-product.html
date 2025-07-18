@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Produk</title>
+  <link rel="stylesheet" href="css/upload.css" />
+
+  <style>
+  /* ================================
+    Global & Base Styles
+  ================================= */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  h1, h2 {
+    text-align: center;
+    color: #ff5722;
+    margin-bottom: 25px;
+  }
+
+  /* ================================
+    Search & Filter
+  ================================= */
+  #searchInput,
+  #filterCategory {
+    width: 100%;
+    max-width: 400px;
+    margin: 10px auto 20px;
+    display: block;
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+  }
+
+  /* ================================
+    Button Styles
+  ================================= */
+  #toggleTheme,
+  #logoutButton {
+    padding: 10px 18px;
+    margin: 0 10px 20px 0;
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  #toggleTheme:hover,
+  #logoutButton:hover {
+    background-color: #e64a19;
+  }
+
+  /* ================================
+    Upload Form Styles
+  ================================= */
+  form#productForm {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin: auto;
+    margin-bottom: 40px;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  form input,
+  form textarea,
+  form select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+  }
+
+  form input:focus,
+  form textarea:focus,
+  form select:focus {
+    border-color: #ff5722;
+    outline: none;
+  }
+
+  form button[type="submit"] {
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  form button:hover {
+    background-color: #43a047;
+  }
+
+  /* ================================
+    File Upload Styles
+  ================================= */
+  .custom-file {
+    text-align: center;
+  }
+
+  .file-label {
+    background-color: #1e88e5;
+    color: white;
+    padding: 12px 24px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+    display: inline-block;
+  }
+
+  .file-label:hover {
+    background-color: #1565c0;
+  }
+
+  .file-hint {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #777;
+  }
+
+  /* ================================
+    Preview Image
+  ================================= */
+  .preview-grid {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .preview-thumb {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  /* ================================
+    Product List & Cards
+  ================================= */
+  #productList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .product-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+  }
+
+  .product-card h3 {
+    color: #ff5722;
+    font-size: 18px;
+    margin: 10px;
+  }
+
+  .product-card p {
+    font-weight: bold;
+    margin: 0 10px 5px;
+    color: #444;
+  }
+
+  .product-card small {
+    font-size: 13px;
+    color: #666;
+    margin: 0 10px 10px;
+    display: block;
+  }
+
+  .product-card button {
+    margin: 6px 8px 10px;
+    padding: 8px 12px;
+    font-size: 13px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+
+  .product-card button:first-of-type {
+    background-color: #2196f3;
+  }
+
+  .product-card button:first-of-type:hover {
+    background-color: #1976d2;
+  }
+
+  .product-card button:last-of-type {
+    background-color: #f44336;
+  }
+
+  .product-card button:last-of-type:hover {
+    background-color: #e53935;
+  }
+
+  /* ================================
+    Category Badge
+  ================================= */
+  .badge {
+    display: inline-block;
+    background-color: #e0f2f1;
+    color: #00796b;
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    margin: 0 10px 10px;
+  }
+
+  /* ================================
+    Responsive Design
+  ================================= */
+  @media (max-width: 600px) {
+    body {
+      padding: 10px;
+    }
+
+    form#productForm {
+      padding: 20px;
+    }
+
+    .product-card img {
+      height: 160px;
+    }
+
+    .file-label {
+      width: 100%;
+    }
+  }
+
+  /* ================================
+    Dark Mode
+  ================================= */
+  body.dark {
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+
+  body.dark h1,
+  body.dark h2 {
+    color: #ffab40;
+  }
+
+  body.dark #toggleTheme,
+  body.dark #logoutButton {
+    background-color: #ffab40;
+    color: black;
+  }
+
+  body.dark #searchInput,
+  body.dark #filterCategory,
+  body.dark input,
+  body.dark select,
+  body.dark textarea {
+    background-color: #1e1e1e;
+    color: #f1f1f1;
+    border: 1px solid #444;
+  }
+
+  body.dark form#productForm {
+    background-color: #1f1f1f;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.4);
+  }
+
+  body.dark .product-card {
+    background-color: #1f1f1f;
+  }
+
+  body.dark .product-card h3 {
+    color: #ffab40;
+  }
+
+  body.dark .product-card p {
+    color: #e0e0e0;
+  }
+
+  body.dark .product-card small {
+    color: #aaa;
+  }
+
+  body.dark .badge {
+    background-color: #333;
+    color: #81c784;
+  }
+
+  body.dark .file-label {
+    background-color: #3949ab;
+  }
+
+  body.dark .file-label:hover {
+    background-color: #303f9f;
+  }
+
+  body.dark form button {
+    background-color: #ffab40;
+    color: #000;
+  }
+
+  body.dark form button:hover {
+    background-color: #fb8c00;
+  }
+
+  .top-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .nav-button {
+      padding: 10px 18px;
+      background-color: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .nav-button:hover {
+      background-color: #e64a19;
+    }
+
+    body.dark .nav-button {
+      background-color: #ffab40;
+      color: black;
+    }
+
+    body.dark .nav-button:hover {
+      background-color: #fb8c00;
+    }
+ </style>
+  <script>
+    // Autentikasi admin
+    fetch("/check-auth", { credentials: "include" })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.authenticated) window.location.href = "/login.html";
+      })
+      .catch(() => window.location.href = "/login.html");
+  </script>
+</head>
+<body>
+
+  <!-- Tombol Admin -->
+  <div class="top-actions">
+    <button id="logoutButton">Logout</button>
+    <button id="toggleTheme">Mode Gelap</button>
+    <a href="index.html">
+      <button id="toggleTheme">Home</button>
+    </a>
+    <a href="upload-banner.html">
+      <button id="toggleTheme">Banner</button>
+    </a>
+  </div>
+
+  <!-- Pencarian -->
+  <input type="text" id="searchInput" placeholder="Cari produk..." class="search-bar" />
+
+  <!-- Form Upload -->
+  <h1>Upload Produk</h1>
+  <form id="productForm" enctype="multipart/form-data">
+    <select name="category" id="categorySelect" required>
+      <option value="">Pilih Kategori</option>
+      <option value="Fruity">Fruity</option>
+      <option value="Faith">Faith</option>
+      <option value="Creamy">Creamy</option>
+      <option value="30ML Series">30ML Series</option>
+      <option value="__tambah">+ Tambah Kategori Baru</option>
+    </select>
+
+    <input type="text" name="name" placeholder="Nama Produk" required />
+    <input type="number" name="price" placeholder="Harga (angka saja)" required />
+    <textarea name="description" placeholder="Deskripsi" required></textarea>
+
+    <!-- Input File -->
+    <div class="custom-file">
+      <label for="imageInput" class="file-label">+ Pilih file...</label>
+      <input 
+        type="file" 
+        name="images" 
+        id="imageInput" 
+        accept="image/*" 
+        multiple 
+        required 
+        hidden 
+      />
+      <p class="file-hint">Pilih satu atau lebih gambar produk</p>
+    </div>
+
+    <div id="previewImageContainer" class="preview-grid"></div>
+
+    <button type="submit">Upload</button>
+  </form>
+
+  <!-- Daftar Produk -->
+  <h2>Daftar Produk</h2>
+  <select id="filterCategory">
+    <option value="">Semua Kategori</option>
+    <option value="Fruity">Fruity</option>
+    <option value="Faith">Faith</option>
+    <option value="Creamy">Creamy</option>
+    <option value="30ML Series">30ML Series</option>
+  </select>
+
+  <div id="productList"></div>
+
+  <!-- Script Tambah Kategori -->
+<script>
+  const select = document.getElementById("categorySelect");
+
+  select.addEventListener("change", async function () {
+    if (this.value !== "__tambah") return;
+
+    const kategoriBaru = prompt("Masukkan nama kategori baru:");
+    const namaKategori = kategoriBaru?.trim();
+
+    if (!namaKategori) {
+      this.selectedIndex = 0;
+      return;
+    }
+
+    const valueKategori = namaKategori.toLowerCase().replace(/\s+/g, "_");
+
+    try {
+      const res = await fetch("/add-category", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ category: namaKategori })
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        const newOption = document.createElement("option");
+        newOption.text = namaKategori;
+        newOption.value = valueKategori;
+
+        const tambahOption = this.querySelector('option[value="__tambah"]');
+        this.insertBefore(newOption, tambahOption);
+        newOption.selected = true;
+      } else {
+        alert("Gagal menambah kategori: " + (result.message || "Terjadi kesalahan."));
+        this.selectedIndex = 0;
+      }
+    } catch (err) {
+      console.error("❌ Gagal kirim kategori:", err);
+      alert("Gagal terhubung ke server.");
+      this.selectedIndex = 0;
+    }
+  });
+</script>
+
+
+  <!-- Script Upload Produk -->
+  <script src="upload.js"></script>
+</body>
+</html>
